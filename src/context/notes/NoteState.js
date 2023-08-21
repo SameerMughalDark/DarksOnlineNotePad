@@ -1,31 +1,86 @@
 import NoteContext from "./NoteContext";
 import { useState } from "react";
 
-const NoteState =(props)=>{
-    let darkNotes=[
-        {
-            "_id": "64d7c4c034181c62ad1c94fb",
-            "user": "64ce0f809550d39c33d68fd0",
-            "title": "Karma First Note",
-            "description": "Hi My name is Karma dekho koi aa raha hai karmaa",
-            "tag": "karma Nostaligic darama",
-            "timeStamp": "2023-08-12T17:43:28.746Z",
-            "__v": 0
-        },
-        {
-            "_id": "64d7c4e934181c62ad1c94fd",
-            "user": "64ce0f809550d39c33d68fd0",
-            "title": "Karma Secound Note",
-            "description": "Asslam-0-Aliekum! Now I want to become a Muslim Karma",
-            "tag": "karma Nostaligic darama Now In Halal(Mode)",
-            "timeStamp": "2023-08-12T17:44:09.931Z",
-            "__v": 0
+const NoteState = (props) => {
+    const host = "http://localhost:5000";
+    let darkNotes = [];
+    const [notes, setNotes] = useState(darkNotes);
+    //Fetching all notes From API
+    const getNotes = async () => {
+
+        const response = await fetch(`${host}/api/notes/fetchallnotes`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjRjZTBmODA5NTUwZDM5YzMzZDY4ZmQwIn0sImlhdCI6MTY5MTIyNTk4NH0.255-ihHwJg63VHn5HlFRqU6aSrSZdAQCEKMtY3WRN-4",
+            },
+            // body:JSON.stringify({title,description,tag})
+        });
+        const data = await response.json();
+        // console.log(data)
+        setNotes(data);
+
+
+    }
+
+    // Add Note Function
+    const addNote = async (title, description, tag) => {
+        const response = await fetch(`http://localhost:5000/api/notes/addnote`, {
+            method: "post",
+            headers: {
+                "Content-Type": "application/json",
+                "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjRjZTBmODA5NTUwZDM5YzMzZDY4ZmQwIn0sImlhdCI6MTY5MTIyNTk4NH0.255-ihHwJg63VHn5HlFRqU6aSrSZdAQCEKMtY3WRN-4",
+            },
+            body:  JSON.stringify({ title, description, tag })
+        });
+        const data = await response.json();
+        setNotes(notes.concat(data))
+    }
+
+    // Delete Note Function
+    const deleteNote = async (id) => {
+
+        const response = await fetch(`${host}/api/notes/deletenote/${id}`, {
+            method: "delete",
+            headers: {
+                "Content-Type": "application/json",
+                "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjRjZTBmODA5NTUwZDM5YzMzZDY4ZmQwIn0sImlhdCI6MTY5MTIyNTk4NH0.255-ihHwJg63VHn5HlFRqU6aSrSZdAQCEKMtY3WRN-4",
+            },
+
+            // body:JSON.stringify({title,description,tag})
+        });
+         await response.json();
+        // means filter all those notes whoose id doesn't match with clickable item id so all notes remain except the that whoose click by us
+        const newNotes = notes.filter((note) => { return note._id !== id })
+        setNotes(newNotes)
+    }
+
+    // Edit Note Function
+    const editNote = async (id, title, description, tag) => {
+        const response = await fetch(`${host}/api/notes/updatenote/${id}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjRjZTBmODA5NTUwZDM5YzMzZDY4ZmQwIn0sImlhdCI6MTY5MTIyNTk4NH0.255-ihHwJg63VHn5HlFRqU6aSrSZdAQCEKMtY3WRN-4",
+            },
+            body: JSON.stringify({ title, description, tag })
+        });
+        await response.json();
+        let newNotes = JSON.parse(JSON.stringify(notes))
+        for (let index = 0; index < newNotes.length; index++) {
+            const element = newNotes[index];
+            if (element._id === id) {
+                newNotes[index].title = title;
+                newNotes[index].description = description;
+                newNotes[index].tag = tag;
+                break;
+            }
         }
-    ]
-    const [notes, setNotes]=useState(darkNotes);
-    return(
-        
-        <NoteContext.Provider value={{notes,setNotes}}>
+        setNotes(newNotes)
+    }
+    return (
+
+        <NoteContext.Provider value={{ notes, setNotes, addNote, deleteNote, editNote, getNotes }}>
             {props.children}
         </NoteContext.Provider>
     )

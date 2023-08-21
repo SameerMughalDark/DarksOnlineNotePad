@@ -5,16 +5,16 @@ export default function Login() {
     <div className="container">
 
     <form>
-  <div class="mb-3">
-    <label for="loginEmail" class="form-label">Email address</label>
-    <input type="email" class="form-control" id="loginEmail" aria-describedby="emailHelp"/>
+  <div className="mb-3">
+    <label htmlFor="loginEmail" className="form-label">Email address</label>
+    <input type="email" className="form-control" id="loginEmail" aria-describedby="emailHelp"/>
   </div>
-  <div class="mb-3">
-    <label for="loginPassword" class="form-label">Password</label>
-    <input type="password" class="form-control" id="loginPassword"/>
+  <div className="mb-3">
+    <label htmlFor="loginPassword" className="form-label">Password</label>
+    <input type="password" className="form-control" id="loginPassword"/>
   </div>
 
-  <button type="submit" class="btn btn-primary">Submit</button>
+  <button type="submit" className="btn btn-primary">Submit</button>
 </form>
     </div>
   )

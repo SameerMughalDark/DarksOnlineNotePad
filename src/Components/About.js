@@ -3,7 +3,7 @@ import NoteContext from '../context/notes/NoteContext'
 
 export default function About() {
   const darkContext = useContext(NoteContext);
-  const {notes,setNotes}=darkContext;
+  const {notes}=darkContext;
   return (
     <div className="container">
         A0A!
