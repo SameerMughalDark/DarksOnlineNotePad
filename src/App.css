@@ -1,0 +1,11 @@
+.editIcon:hover, .removeIcon:hover{
+    cursor: pointer;
+    background-color: #050505;
+    color: whitesmoke;
+    border: 2px solid rgb(124, 123, 123);
+    border-radius: 50%;
+    padding: 12px;
+    transition: all 0.2s ease-in-out;
+    
+
+}

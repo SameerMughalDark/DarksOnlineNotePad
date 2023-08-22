@@ -1,8 +1,15 @@
 import React from 'react'
 // Adding Link of Routes of My Web-APP with Help of create-router-dom package
 import { Link } from 'react-router-dom';
+import{ useNavigate }from 'react-router-dom';
 
 export default function Navbar() {
+  let navigator=useNavigate();
+
+  const handleLogout=()=>{
+    localStorage.removeItem('token');
+    navigator('/login');
+  }
   return (
     <nav className="navbar navbar-expand-lg bg-dark navbar-dark">
     <div className="container-fluid">
@@ -15,19 +22,21 @@ export default function Navbar() {
           <li className="nav-item">
             <Link className="nav-link" aria-current="page" to="/">Home</Link>
           </li>
-          <li className="nav-item">
-            <Link className="nav-link" aria-current="page" to="/login">Login</Link>
-          </li>
+
           <li className="nav-item">
             <Link className="nav-link" to="/about">About-Us</Link>
           </li>
         
        
         </ul>
-        <form className="d-flex" role="search">
-          <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
-          <button className="btn btn-outline-success" type="submit">Search</button>
-        </form>
+        
+          {
+          localStorage.getItem('token')?<form className="d-flex" role="search"><Link to={"/login"} className="btn btn-outline-danger" onClick={handleLogout}>Log-out</Link>  </form>:<form className="d-flex" role="search">
+          <Link to={"/login"} className="btn btn-outline-success" >Login</Link>
+          <Link to={"/signup"} className="btn btn-outline-success mx-3" >Sign-Up</Link>
+          </form>
+        }
+        
       </div>
     </div>
   </nav>
