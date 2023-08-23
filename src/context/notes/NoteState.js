@@ -4,7 +4,24 @@ import { useState } from "react";
 const NoteState = (props) => {
     const host = "http://localhost:5000";
     let darkNotes = [];
+    let logedInUser="Unknown-User";
     const [notes, setNotes] = useState(darkNotes);
+    const [currentUser, setCurrentUser] = useState(logedInUser);
+        // function for gettign Information of loged in user with help of auth-token
+        const logedinUserDetail=async()=>{
+            const resp=await fetch("http://localhost:5000/api/auth/getuser",{
+                method:"POST",
+                headers:{
+                    "Content-Type":"application/json",
+                    "auth-token": localStorage.getItem('token'),
+                },
+                
+                // body:JSON.stringify({})
+            });
+            let data=await resp.json();
+            let currentUser=data.name;
+            setCurrentUser(currentUser);
+        }
     //Fetching all notes From API
     const getNotes = async () => {
 
@@ -78,9 +95,11 @@ const NoteState = (props) => {
         }
         setNotes(newNotes)
     }
+
+  
     return (
 
-        <NoteContext.Provider value={{ notes, setNotes, addNote, deleteNote, editNote, getNotes }}>
+        <NoteContext.Provider value={{ notes, setNotes, addNote, deleteNote, editNote, getNotes, logedinUserDetail,currentUser}}>
             {props.children}
         </NoteContext.Provider>
     )

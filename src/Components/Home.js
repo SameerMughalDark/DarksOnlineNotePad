@@ -10,12 +10,15 @@ import { useNavigate } from 'react-router-dom';
 
 export default function Home() {
   const context = useContext(NoteContext);
-  const { notes, getNotes,editNote } = context;
+  const { notes, getNotes,editNote,logedinUserDetail ,currentUser} = context;
   const [note,setNote]=useState({id:"",etitle:"",edescription:"",etag:""});
+  
+
   let navigator=useNavigate()
   useEffect(() => {
     if(localStorage.getItem('token')){
       getNotes();
+     logedinUserDetail();
     }
     else{
       navigator('/login')
@@ -40,11 +43,13 @@ export default function Home() {
     ref.current.click();
 
   }
+  let uname=currentUser
+
   return (
     <>
 
       <div className="container">
-        <AddNote />
+        <AddNote currentUser={uname} />
         <button type="button" className="btn btn-primary d-none" ref={ref} data-bs-toggle="modal" data-bs-target="#staticBackdrop">
           Launch static backdrop modal
         </button>

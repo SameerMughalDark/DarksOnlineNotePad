@@ -3,9 +3,12 @@ import NoteContext from '../context/notes/NoteContext';
 
 
 
-function AddNote() {
+
+
+function AddNote(props) {
+
 const context=useContext(NoteContext);
-const {addNote}=context;
+const {addNote,}=context;
     const [note,setNotes]=useState({title:"",description:"",tag:""});
     const onChange=(e)=>{
         setNotes({...note,[e.target.name]: e.target.value})
@@ -14,11 +17,14 @@ const {addNote}=context;
         e.preventDefault();
         addNote(note.title,note.description,note.tag);
         setNotes({title:"",description:"",tag:""})
-    }
-  return (
+    };
+    
 
+  return (
     <form> 
-    <div className="mb-3">
+    <div className="mb-3 ">
+    <h3 className='my-3 userNameHeading'>Welcome {props.currentUser}</h3>
+
     <h2 align='center' className='my-3'>Add Your New Note Here:</h2>
 
       <label htmlFor="title" className="form-label">Title</label>
